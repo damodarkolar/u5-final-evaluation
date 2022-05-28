@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            display: flex;
+            flex-direction: column;
+            padding: 100px;
+            
+        }
+        #button{
+            width: 200px;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: blue;
+            color: white;
+            font-size: large;
+
+        }
+        #dataDiv{
+            display: flex;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+        .titleDiv{
+            width: 300px;
+            height: 50px;
+            margin: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .titleDiv button{
+            height: 30px;
+            background-color: teal;
+            color: white;
+            border-radius: 10px;
+            width: 60px;
+        }
+        .titleDiv h2{
+            margin-top: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="inputDiv">
+            <input type="text" id="input">
+            <input type="checkbox" id="checkbox" checked>
+        </div>
+        <button onclick="addData()" id="button"> Add</button>
+        <div id="dataDiv">
+
+        </div>
+    </div>
+</body>
+<script type="module">
+    // import {v4 as uuid } from 'uuid';
+
+    // console.log(uuid())
+    // window.addEventListener("load",GettingData);
+
+
+    async function GettingData(){
+        try {
+            let res =await fetch(``);
+            
+            let data=await res.json();
+
+            titlePageCreation(data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function titlePageCreation(arr){
+        let container=document.getElementById("dataDiv");
+
+        console.log(arr)
+
+        arr.forEach((element) => {
+            let titleDiv=document.createElement("div");
+            titleDiv.setAttribute("class","titleDiv")
+
+            let titleElement=document.createElement("h2");
+
+            let editButton=document.createElement("button");
+            editButton.innerText="Edit"
+
+            let deleteButton=document.createElement("button");
+            deleteButton.innerText="Delete"
+
+            titleElement.innerText=element.title;
+
+            if(element.status){
+                titleElement.style="color:olive"
+            }else{
+                titleElement.style="color:red"
+            }
+
+            editButton.addEventListener("click",()=>{
+                let titleId=JSON.parse(localStorage.getItem("titleId")) || [];
+
+                localStorage.setItem("titleId",JSON.stringify(element.id));
+
+                window.location.href="./edit.html";
+            })
+
+            titleDiv.append(titleElement,editButton,deleteButton);
+            container.append(titleDiv);
+        });      
+
+        
+    }
+
+
+function addData(){
+    let titleInput=document.getElementById("input").value;
+    let statusInput=document.getElementById("checkbox").checked;
+    let body={
+        title: titleInput,
+        status: statusInput
+    }     
+    
+    
+    
+}
+</script>
+</html>
